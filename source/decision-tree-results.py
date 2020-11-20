@@ -1,5 +1,6 @@
 import csv
 from joblib import dump, load
+import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -45,6 +46,10 @@ dt_mean_error = (abs(dt_predict - Y_test) / len(Y_test)).sum()
 
 dt_mean_squared_error = (abs(dt_predict - Y_test)**2 / len(Y_test)).sum()
 
+features = np.column_stack(
+    (X_training.columns, dt_best_model.feature_importances_))
+
+
 results = {
     "mean_error": dt_mean_error,
     "mean_squared_error": dt_mean_squared_error,
@@ -54,6 +59,9 @@ results = {
 }
 
 # Persist results
+print(features)
+print("Tree depth: {}".format(dt_best_model.get_depth()))
+print("Tree number of leaves: {}".format(dt_best_model.get_n_leaves()))
 print("Training score default model: " + str(score_train_default))
 print("Testing score default model: " + str(score_test_default))
 
