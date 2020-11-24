@@ -41,8 +41,9 @@ df.to_csv('../data/processed_removed_outliers.csv')
 # Normalize values
 scaler = StandardScaler()
 dataset_scaled = scaler.fit_transform(df)
+
 #scaled_reverse = scaler.inverse_transform(dataset)
 #df_scaled_reverse = pd.DataFrame(scaled_reverse, columns=dataset.columns)
 df_norm = pd.DataFrame(dataset_scaled, columns=df.columns)
-
-df.to_csv('../data/processed_removed_outliers_normalized.csv')
+print(df_norm.mean(axis=0)["bedrooms"])
+df_norm.to_csv('../data/processed_removed_outliers_normalized.csv')
