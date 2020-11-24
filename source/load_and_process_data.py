@@ -1,7 +1,9 @@
 import pandas as pd
+from joblib import dump
 import scipy as stats
 import numpy as np
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 
 raw_data = pd.read_csv('../data/kc_house_data.csv')
@@ -39,11 +41,33 @@ df[(np.abs(stats.stats.zscore(df)) < 3).all(axis=1)]
 df.to_csv('../data/processed_removed_outliers.csv')
 
 # Normalize values
+copy = df.copy()
+y = df['price']
+copy.drop('price', axis=1)
 scaler = StandardScaler()
-dataset_scaled = scaler.fit_transform(df)
+dataset_scaled = scaler.fit_transform(copy)
 
+dump(scaler, '../models/datascaler.joblib')
 #scaled_reverse = scaler.inverse_transform(dataset)
 #df_scaled_reverse = pd.DataFrame(scaled_reverse, columns=dataset.columns)
-df_norm = pd.DataFrame(dataset_scaled, columns=df.columns)
-print(df_norm.mean(axis=0)["bedrooms"])
+df_norm = pd.DataFrame(dataset_scaled, columns=copy.columns)
+df_norm['price'] = y
+
 df_norm.to_csv('../data/processed_removed_outliers_normalized.csv')
+
+# Split into train test split
+X = df_norm.iloc[:, 1:]  # Splice dataframe: All items along 0-axis (values)
+
+# and all attributes along 1-axis, except index 1, which is price
+# All values along 0-axis and, but only the price column
+Y = df_norm.iloc[:, 0]
+# Y_scaler = scaler.fit_transform(Y)
+# Split data into training data and test data
+X_training, X_test, Y_training, Y_test = train_test_split(
+    X, Y, test_size=0.2, random_state=0)
+
+X_training.to_csv('../data/x_training')
+X_test.to_csv('../data/x_test')
+Y_training.to_csv('../data/y_training')
+Y_test.to_csv('../data/Y_test')
+print(Y)
