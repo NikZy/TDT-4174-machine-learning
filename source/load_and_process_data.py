@@ -35,10 +35,8 @@ df.drop(['id', 'date', 'yr_renovated', 'yr_built',
 
 df.to_csv('../data/processed.csv')
 
-# Remove outliers
-df[(np.abs(stats.stats.zscore(df)) < 3).all(axis=1)]
 
-df.to_csv('../data/processed_removed_outliers.csv')
+# df.to_csv('../data/processed_removed_outliers.csv')
 
 # Normalize values
 copy = df.copy()
@@ -48,11 +46,20 @@ scaler = StandardScaler()
 dataset_scaled = scaler.fit_transform(copy)
 
 dump(scaler, '../models/datascaler.joblib')
-#scaled_reverse = scaler.inverse_transform(dataset)
-#df_scaled_reverse = pd.DataFrame(scaled_reverse, columns=dataset.columns)
+# scaled_reverse = scaler.inverse_transform(dataset)
+# df_scaled_reverse = pd.DataFrame(scaled_reverse, columns=dataset.columns)
 df_norm = pd.DataFrame(dataset_scaled, columns=copy.columns)
-df_norm['price'] = y
+df_norm['price'] = df['price']
 
+print(df_norm.min(axis=0)['bedrooms'])
+
+
+# Remove outliers
+z = np.abs(stats.stats.zscore(df_norm))
+print(z)
+print(np.where(z > 3))
+df_norm = df_norm[(z < 3).all(axis=1)]
+print(df_norm.min(axis=0)['bedrooms'])
 df_norm.to_csv('../data/processed_removed_outliers_normalized.csv')
 
 # Split into train test split
@@ -64,7 +71,7 @@ Y = df_norm.iloc[:, 0]
 # Y_scaler = scaler.fit_transform(Y)
 # Split data into training data and test data
 X_training, X_test, Y_training, Y_test = train_test_split(
-    X, Y, test_size=0.2, random_state=0)
+    X, Y, test_size=0.3, random_state=0)
 
 X_training.to_csv('../data/x_training')
 X_test.to_csv('../data/x_test')
