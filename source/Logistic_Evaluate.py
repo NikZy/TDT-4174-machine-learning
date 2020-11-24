@@ -7,29 +7,33 @@ from sklearn.model_selection import GridSearchCV
 from sklearn import tree
 from sklearn.metrics import explained_variance_score
 
-df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
-df = df.iloc[:,1:]
+X_test = pd.read_csv('../data/x_test').iloc[:, 1:]
+Y_test = pd.read_csv('../data/Y_test')
+Y_training = pd.read_csv('../data/Y_training')
+#df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
+#df = df.iloc[:,1:]
+
 x_varLog = []
 y_varLog = []
 thetaLog = []
-testSetSize = 1000
+testSetSize = len(X_test)
+min = Y_training.min(axis=0)['price']
+max = Y_training.max(axis=0)['price']
 
 f = open("../models/logistic.txt", 'r')
 
 for i in f.readline().split(','):
     thetaLog.append(float(i))
 f.close()
+#227491.80341677365
 
-
-for i in range(2000 + testSetSize):
-    tempListLog = []
-    for e in df.keys():
-        if(e == 'price'):
-            y_varLog.append(((df[e][i]) / 6) +0.5)
-        else:
-            tempListLog.append(df[e][i])
-    tempListLog.append(1)
-    x_varLog.append(tempListLog)
+for i in range(len(X_test)):
+    tempList = []
+    y_varLog.append(Y_test['price'][i])
+    for e in X_test.keys():
+        tempList.append(X_test[e][i])
+    tempList.append(1)
+    x_varLog.append(tempList)
 
 def predict(x, thet):
     sum = 0
@@ -38,40 +42,31 @@ def predict(x, thet):
     return (1 / (1 + (2.7183**-sum)))
 
 def compare(i):
-    pred = ((predict(x_varLog[i], thetaLog) - 0.5) * 6) 
-    pri = ((y_varLog[i] - 0.5) * 6) 
+    pred = predict(x_varLog[i], thetaLog) * (max-min) + min
+    pri = y_varLog[i]
     
-    predscaled = (pred* 367127) + 540088
-    priscaled = (pri* 367127) + 540088
-    diffscaled = abs(predscaled - priscaled)
+    diff= abs(pred - pri)
 
-    space1  = ' ' * (20 - len(str(predscaled)))
-    space2  = ' ' * abs(len(str(round(predscaled))) - len(str(round(diffscaled))))
+    space1  = ' ' * (20 - len(str(pred)))
+    space2  = ' ' * abs(len(str(round(pred))) - len(str(round(diff))))
 
-    print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', predscaled, space1, priscaled)
-    print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diffscaled))
+    print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', pred, space1, pri)
+    print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diff))
 
     return abs(pred - pri)
 
 def compareAvrage():
-    pred = df.mean(axis=0)['price']
-    pri = ((y_varLog[i] - 0.5) * 6)
+    pred = Y_test.mean(axis=0)['price']
+    pri = y_varLog[i]
     return abs(pred - pri)
 
 
-NormalizedMeanAbsoluteErrorLogistic= 0
-NormalizedMeanAbsoluteErrorFromAverage = 0
 MeanAbsoluteErrorLogistic = 0
 MeanAbsoluteErrorFromAverage = 0
 
-for i in range(2000, 2000 + testSetSize):
-    MeanAbsoluteErrorLogistic += ((compare(i) * 367127) + 540088) / testSetSize
-    MeanAbsoluteErrorFromAverage += ((compareAvrage() * 367127) + 540088)/ testSetSize
-    NormalizedMeanAbsoluteErrorLogistic += compare(i)/ testSetSize
-    NormalizedMeanAbsoluteErrorFromAverage += compareAvrage()/ testSetSize
-
-print ("Normalized MAE using logistic regression:", NormalizedMeanAbsoluteErrorLogistic)
-print ("Normalized MAE using guess average:      ",NormalizedMeanAbsoluteErrorFromAverage)
+for i in range(testSetSize):
+    MeanAbsoluteErrorLogistic += compare(i)/ testSetSize
+    MeanAbsoluteErrorFromAverage += compareAvrage()/ testSetSize
 
 print ("MAE using logistic regression:", MeanAbsoluteErrorLogistic)
 print ("MAE using guess average:      ", MeanAbsoluteErrorFromAverage)

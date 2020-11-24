@@ -7,8 +7,11 @@ from sklearn.model_selection import GridSearchCV
 from sklearn import tree
 from sklearn.metrics import explained_variance_score
 
-df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
-df = df.iloc[:,1:]
+
+X_test = pd.read_csv('../data/x_test').iloc[:, 1:]
+Y_test = pd.read_csv('../data/Y_test')
+#df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
+#df = df.iloc[:,1:]
 
 
 f = open("../models/linear.txt", 'r')
@@ -17,61 +20,57 @@ for i in f.readline().split(','):
     theta.append(float(i))
 f.close()
 
+4035474464592.696
 
-
-testSetSize = 1000
+testSetSize = len(X_test)
 x_var = []
 y_var = []
 
-for i in range(2000 + testSetSize):
+x_var = []
+y_var = []
+
+#scaler = StandardScaler()
+#Y_test = pd.DataFrame(scaler.fit_transform(Y_test), columns=Y_test.columns)
+
+for i in range(len(X_test)):
     tempList = []
-    for e in df.keys():
-        if(e == 'price'):
-            y_var.append(df[e][i])
-        else:
-            
-            tempList.append(df[e][i])
+    y_var.append(Y_test['price'][i])
+    for e in X_test.keys():
+        tempList.append(X_test[e][i])
     tempList.append(1)
     x_var.append(tempList)
+
 
 def predict(x, thet):
     sum = 0
     for i in range(len(x)):
+        #print(x[i])
         sum+= x[i] * thet[i]
     return sum
 
 def compare(i):
     pred = predict(x_var[i], theta)
     pri = y_var[i]
-    predscaled = (pred* 367127) + 540088
-    priscaled = (pri* 367127) + 540088
-    diffscaled = abs(predscaled - priscaled)
+    diff = abs(pred - pri)
 
-    space1  = ' ' * (20 - len(str(predscaled)))
-    space2  = ' ' * abs(len(str(round(predscaled))) - len(str(round(diffscaled))))
+    space1  = ' ' * (20 - len(str(pred)))
+    space2  = ' ' * abs(len(str(round(pred))) - len(str(round(pri))))
 
-    print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', predscaled, space1, priscaled)
-    print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diffscaled))
-
+    print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', pred, space1, pri)
+    print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diff))
     return abs(pred - pri)
 def compareAvrage():
-    pred = df.mean(axis=0)['price']
+    pred = Y_test.mean(axis=0)['price']
     pri = y_var[i]
     return abs(pred - pri)
 
-NormalizedMeanAbsoluteErrorLinear = 0
-NormalizedMeanAbsoluteErrorFromAverage = 0
 MeanAbsoluteErrorLinear = 0
 MeanAbsoluteErrorFromAverage = 0
 
-for i in range(2000, 2000 + testSetSize):
-    MeanAbsoluteErrorLinear += ((compare(i) * 367127) + 540088)/ testSetSize
-    MeanAbsoluteErrorFromAverage += ((compareAvrage() * 367127) + 540088)/ testSetSize
-    NormalizedMeanAbsoluteErrorLinear += compare(i)/ testSetSize
-    NormalizedMeanAbsoluteErrorFromAverage += compareAvrage()/ testSetSize
+for i in range(testSetSize):
 
-print ("Normalized MAE using linear regression:", NormalizedMeanAbsoluteErrorLinear)
-print ("Normalized MAE using guess average:    ",NormalizedMeanAbsoluteErrorFromAverage)
+    MeanAbsoluteErrorLinear += compare(i)/ testSetSize
+    MeanAbsoluteErrorFromAverage += compareAvrage()/ testSetSize
 
 print ("MAE using linear regression:", MeanAbsoluteErrorLinear)
 print ("MAE using guess average:    ", MeanAbsoluteErrorFromAverage)

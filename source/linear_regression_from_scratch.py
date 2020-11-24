@@ -7,35 +7,40 @@ from sklearn.model_selection import GridSearchCV
 from sklearn import tree
 from sklearn.metrics import explained_variance_score
 
-df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
-df = df.iloc[:,1:]
+dataset = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
+
+scaler = load('../models/datascaler.joblib')
+X_training = pd.read_csv('../data/x_training').iloc[:, 1:]
+Y_training = pd.read_csv('../data/y_training')
+
+#df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
+#df = df.iloc[:,1:] 
 x_var = []
 y_var = []
 
-means = {}
-stds = {}
-for e in df.keys():
-    means[e] = df.mean(axis=0)[e]
-    stds[e] = df.std(axis=0)[e]
-    print(means[e], e)
-for i in range(1000):
+
+
+#scaler = StandardScaler()
+#Y_training = pd.DataFrame(scaler.fit_transform(Y_training), columns=Y_training.columns)
+
+for i in range(len(X_training)):
     tempList = []
-    for e in df.keys():
-        if(e == 'price'):
-            y_var.append(df[e][i])
-        else:
-            tempList.append(df[e][i])
+    y_var.append(Y_training['price'][i])
+    #print(Y_training['price'][i])
+    for e in X_training.keys():
+        tempList.append(X_training[e][i])
+        #print(X_training[e][i], e)
     tempList.append(1)
     x_var.append(tempList)
-theta = [1] * len(x_var[0])
 
 
-def firstGradient(thet, y, x,):
-    gradient = [0] * len(x[0])
-    for j in range(len(x[0])):
-        for i in range(len(x)):
-            gradient[j] += (y[i] - dotProduct(x[i], thet)) * x[i][j]
-    return gradient
+f = open("../models/linear.txt", 'r')
+theta = []
+for i in f.readline().split(','):
+    theta.append(float(i))
+f.close()
+
+
 
 def dotProduct(x_i, theta):
     sum = 0
@@ -66,11 +71,8 @@ def grafdientDecent(thet, y, x, alpha, error, it):
         print(it)
         return thet
 
-alpha = vectorLength(firstGradient(theta, y_var, x_var))
-theta = [0] * len(x_var[0])
 
-
-theta = grafdientDecent(theta, y_var, x_var,0.0001, 0.001, 0)  # for 1000
+theta = grafdientDecent(theta, y_var, x_var,0.0000122, 0.001, 0)  # for 1000
 
 
 print(theta[0])
@@ -84,7 +86,7 @@ f.write(thetaString)
 f.close()
 
 i = -1
-for e in df.keys():
+for e in X_training.keys():
     if(i >= 0): 
         print(e, theta[i])
     i += 1

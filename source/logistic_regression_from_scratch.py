@@ -9,35 +9,32 @@ from sklearn.model_selection import GridSearchCV
 from sklearn import tree
 from sklearn.metrics import explained_variance_score
 
-df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
-df = df.iloc[:,1:]
+scaler = load('../models/datascaler.joblib')
+X_training = pd.read_csv('../data/x_training').iloc[:, 1:]
+Y_training = pd.read_csv('../data/y_training')
 
+#df = pd.read_csv('../data/processed_removed_outliers_normalized.csv')
+#df = df.iloc[:,1:]
 x_varLog = []
 y_varLog = []
-means = {}
-stds = {}
-for e in df.keys():
-    means[e] = df.mean(axis=0)[e]
-    stds[e] = df.std(axis=0)[e]
-for i in range(1000):
-    tempListLog = []
-    for e in df.keys():
-        if(e == 'price'):
-            y_varLog.append(((df[e][i]) / 6) +0.5)
-        else:
-            tempListLog.append(df[e][i])
-    tempListLog.append(1)
-    x_varLog.append(tempListLog)
+min = Y_training.min(axis=0)['price']
+max = Y_training.max(axis=0)['price']
+#scaler = StandardScaler()
+#Y_training = pd.DataFrame(scaler.fit_transform(Y_training), columns=Y_training.columns)
+for i in range(len(X_training)):
+    tempList = []
+    y_varLog.append((Y_training['price'][i] - min) / (max - min))
+    for e in X_training.keys():
+        tempList.append(X_training[e][i])
+    tempList.append(1)
+    x_varLog.append(tempList)
 
-thetaLog = [0] * len(x_varLog[0])
-thetaLog = [-0.031122708341986813,0.029420506270732925,0.16785749486429077,0.03941286959118013,0.023374844258660245,0.49475461564683315,0.11422284507112586,0.02077289165969612,0.17606296942503274,0.1453008172986899,0.07647266349214207,-0.00454123339852773,0.03267837038659651,-0.00020674581626123627,0.1815756421459938,0.14269001561596226,0.032263517924732046]
 
-def firstGradientLog(thet, y, x,):
-    gradient = [0] * len(x[0])
-    for j in range(len(x[0])):
-        for i in range(len(x)):
-            gradient[j] += (y[i] - logisticProduct(x[i], thet)) * x[i][j]
-    return gradient
+f = open("../models/logistic.txt", 'r')
+thetaLog = []
+for i in f.readline().split(','):
+    thetaLog.append(float(i))
+f.close()
 
 
 def logisticProduct(x_i, theta):
@@ -71,7 +68,7 @@ def grafdientDecentLog(thet, y, x, alpha, error, it):
         return thet
 
 
-thetaLog = grafdientDecentLog(thetaLog, y_varLog, x_varLog, 0.00085, 0.34, 0)
+thetaLog = grafdientDecentLog(thetaLog, y_varLog, x_varLog, 0.00004, 1, 0)
 
 
 print(thetaLog[0])
