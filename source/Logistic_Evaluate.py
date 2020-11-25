@@ -25,7 +25,6 @@ f = open("../models/logistic.txt", 'r')
 for i in f.readline().split(','):
     thetaLog.append(float(i))
 f.close()
-#227491.80341677365
 
 for i in range(len(X_test)):
     tempList = []
@@ -41,7 +40,7 @@ def predict(x, thet):
         sum+= x[i] * thet[i]
     return (1 / (1 + (2.7183**-sum)))
 
-def compare(i):
+def compareAbs(i):
     pred = predict(x_varLog[i], thetaLog) * (max-min) + min
     pri = y_varLog[i]
     
@@ -55,18 +54,44 @@ def compare(i):
 
     return abs(pred - pri)
 
-def compareAvrage():
+def compareSquare(i):
+    pred = predict(x_varLog[i], thetaLog) * (max-min) + min
+    pri = y_varLog[i]
+    
+    diff= abs(pred - pri)
+
+    space1  = ' ' * (20 - len(str(pred)))
+    space2  = ' ' * abs(len(str(round(pred))) - len(str(round(diff))))
+
+    print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', pred, space1, pri)
+    print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diff))
+
+    return (pred - pri)**2
+
+def compareAvrageAbs():
     pred = Y_test.mean(axis=0)['price']
     pri = y_varLog[i]
     return abs(pred - pri)
 
+def compareAvrageSquare():
+    pred = Y_test.mean(axis=0)['price']
+    pri = y_varLog[i]
+    return (pred - pri)**2
+
 
 MeanAbsoluteErrorLogistic = 0
 MeanAbsoluteErrorFromAverage = 0
+MeanSquaredErrorLogistic = 0
+MeanSquaredErrorFromAverage = 0
 
 for i in range(testSetSize):
-    MeanAbsoluteErrorLogistic += compare(i)/ testSetSize
-    MeanAbsoluteErrorFromAverage += compareAvrage()/ testSetSize
+    MeanAbsoluteErrorLogistic += compareAbs(i)/ testSetSize
+    MeanSquaredErrorLogistic += compareSquare(i)/ testSetSize
+    MeanAbsoluteErrorFromAverage += compareAvrageAbs()/ testSetSize
+    MeanSquaredErrorFromAverage += compareAvrageSquare()/ testSetSize
 
 print ("MAE using logistic regression:", MeanAbsoluteErrorLogistic)
 print ("MAE using guess average:      ", MeanAbsoluteErrorFromAverage)
+
+print ("MSE using logistic regression:", MeanSquaredErrorLogistic)
+print ("MSE using guess average:      ", MeanSquaredErrorFromAverage)

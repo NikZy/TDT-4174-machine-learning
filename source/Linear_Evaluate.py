@@ -48,7 +48,7 @@ def predict(x, thet):
         sum+= x[i] * thet[i]
     return sum
 
-def compare(i):
+def compareAbs(i):
     pred = predict(x_var[i], theta)
     pri = y_var[i]
     diff = abs(pred - pri)
@@ -59,18 +59,40 @@ def compare(i):
     print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', pred, space1, pri)
     print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diff))
     return abs(pred - pri)
-def compareAvrage():
+def compareSquare(i):
+    pred = predict(x_var[i], theta)
+    pri = y_var[i]
+    diff = (pred - pri)**2
+
+    space1  = ' ' * (20 - len(str(pred)))
+    space2  = ' ' * abs(len(str(round(pred))) - len(str(round(pri))))
+
+    print(i, (' ' * (5-len(str(i) )) ),'prediction|price:', pred, space1, pri)
+    print(i, (' ' * (5-len(str(i) )) ),'difference:      ',space2 + str(diff))
+    return (pred - pri)**2
+def compareAvrageAbs():
     pred = Y_test.mean(axis=0)['price']
     pri = y_var[i]
     return abs(pred - pri)
+def compareAvrageSquare():
+    pred = Y_test.mean(axis=0)['price']
+    pri = y_var[i]
+    return (pred - pri)**2
 
 MeanAbsoluteErrorLinear = 0
+MeanSquarerrorLinear = 0
 MeanAbsoluteErrorFromAverage = 0
+MeanSquareErrorFromAverage = 0
 
 for i in range(testSetSize):
 
-    MeanAbsoluteErrorLinear += compare(i)/ testSetSize
-    MeanAbsoluteErrorFromAverage += compareAvrage()/ testSetSize
+    MeanAbsoluteErrorLinear += compareAbs(i)/ testSetSize
+    MeanSquarerrorLinear += compareSquare(i)/ testSetSize
+    MeanAbsoluteErrorFromAverage += compareAvrageAbs()/ testSetSize
+    MeanSquareErrorFromAverage += compareAvrageSquare()/ testSetSize
 
 print ("MAE using linear regression:", MeanAbsoluteErrorLinear)
 print ("MAE using guess average:    ", MeanAbsoluteErrorFromAverage)
+
+print ("MSE using linear regression:", MeanSquarerrorLinear)
+print ("MSE using guess average:    ", MeanSquareErrorFromAverage)

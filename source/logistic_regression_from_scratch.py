@@ -57,21 +57,20 @@ def grafdientDecentLog(thet, y, x, alpha, error, it):
     for j in range(len(x[0])):
         for i in range(len(x)):
             gradient[j] += (y[i] - logisticProduct(x[i], thet)) * x[i][j]
-    print(vectorLength(gradient))
     for j in range(len(x[0])):
         thet[j] += (alpha * gradient[j])
     if vectorLength(gradient) > error:
         it = it+1
+        print('Gradient length:', vectorLength(gradient), '\n   ' + 'Iterations:',it)
         return grafdientDecentLog(thet, y, x, alpha, error, it)
     else:
-        print(it)
+        print('\n' + 'Total iterations:',it, '\n')
         return thet
 
 
 thetaLog = grafdientDecentLog(thetaLog, y_varLog, x_varLog, 0.00004, 1, 0)
 
 
-print(thetaLog[0])
 thetaString = str(thetaLog[0])
 for i in range(1, len(thetaLog)):
     thetaString += ","+str(thetaLog[i])
@@ -80,3 +79,26 @@ f = open("../models/logistic.txt", 'w')
 
 f.write(thetaString)
 f.close()
+
+thetaLog.sort()
+
+i = 0
+print('Name                          Normalized Theta     Scaled up theta')
+for key in X_training.keys():
+    name = key
+    theta  = round(thetaLog[i], 6)
+    thetaScaled  = round((thetaLog[i] * (max - min) + min), 6)
+
+    decimalPointAligner1 = ''
+    if len(str(round(theta, 5))) != len(str(theta)):
+        decimalPointAligner1 = ' '
+    decimalPointAligner2 = (1 - len(decimalPointAligner1)) * ' '
+    if len(str(round(thetaScaled, 5))) != len(str(thetaScaled)):
+        decimalPointAligner2 += ' '
+
+    nameSpace = (15 - len(name)) * ' '
+    thetaSpace = (20 - len(str(theta))) * ' '
+    thetaScaledSpace = (20 - len(str(thetaScaled))) * ' '
+
+    print(name +  nameSpace, decimalPointAligner1, thetaSpace, theta, decimalPointAligner2 ,  thetaScaledSpace, thetaScaled)
+    i+=1

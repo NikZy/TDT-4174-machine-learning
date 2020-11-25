@@ -41,7 +41,6 @@ for i in f.readline().split(','):
 f.close()
 
 
-
 def dotProduct(x_i, theta):
     sum = 0
     for j in range(len(x_i)):
@@ -64,18 +63,18 @@ def grafdientDecent(thet, y, x, alpha, error, it):
     for j in range(len(x[0])):
         thet[j] += (alpha * gradient[j])
     if vectorLength(gradient) > error:
-        print(vectorLength(gradient))
         it = it+1
+        print('Gradient length:', vectorLength(gradient), '\n   ' + 'Iterations:',it)
         return grafdientDecent(thet, y, x, alpha, error, it)
     else:
-        print(it)
+        print('\n' + 'Total iterations:',it, '\n')
         return thet
 
 
-theta = grafdientDecent(theta, y_var, x_var,0.0000122, 0.001, 0)  # for 1000
+
+theta = grafdientDecent(theta, y_var, x_var,0.00003, 0.1, 0)
 
 
-print(theta[0])
 thetaString = str(theta[0])
 for i in range(1, len(theta)):
     thetaString += ","+str(theta[i])
@@ -85,8 +84,21 @@ f = open("../models/linear.txt", 'w')
 f.write(thetaString)
 f.close()
 
-i = -1
-for e in X_training.keys():
-    if(i >= 0): 
-        print(e, theta[i])
-    i += 1
+theta.sort()
+i = 0
+
+
+print('Name                       Theta')
+for key in X_training.keys():
+    name = key
+    thet  = round(theta[i], 6)
+
+    decimalPointAligner = ''
+    if len(str(round(thet, 5))) != len(str(thet)):
+        decimalPointAligner = ' '
+        
+    nameSpace = (15 - len(name)) * ' '
+    thetaSpace = (20 - len(str(thet))) * ' '
+
+    print(name + nameSpace , decimalPointAligner, thetaSpace, thet)
+    i+=1
