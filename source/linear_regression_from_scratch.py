@@ -71,7 +71,7 @@ def grafdientDecent(thet, y, x, alpha, error, it):
         print('\n' + 'Total iterations:',it, '\n')
         return thet
 
-#initiate gradient decent with  0.00003 alpha and 0.1 epsilon
+#initiate gradient decent with  0.00003 alpha and 0.000001 epsilon
 epsilon = 0.000001
 alpha = 0.00003
 theta = grafdientDecent(theta, y_var, x_var, alpha, epsilon, 0)

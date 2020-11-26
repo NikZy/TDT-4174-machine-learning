@@ -82,9 +82,16 @@ for i in range(testSetSize):
     MeanAbsoluteErrorFromAverage += compareAvrageAbs(i)/ testSetSize
     MeanSquareErrorFromAverage += compareAvrageSquare(i)/ testSetSize
 
-#print out results
-print ("MAE using linear regression:", MeanAbsoluteErrorLinear)
-print ("MAE using guess average:    ", MeanAbsoluteErrorFromAverage)
+#print out and save results
 
-print ("MSE using linear regression:", MeanSquarerrorLinear)
-print ("MSE using guess average:    ", MeanSquareErrorFromAverage)
+stringOutput = ("MAE using linear regression:" + str(MeanAbsoluteErrorLinear) + 
+"\nMAE using guess average:      " + str(MeanAbsoluteErrorFromAverage) + 
+"\nMSE using linear regression:" + str(MeanSquarerrorLinear) + 
+"\nMSE using guess average:      " + str(MeanSquareErrorFromAverage))
+
+print (stringOutput)
+
+f = open("../results/linearResults.txt", 'w')
+
+f.write(stringOutput)
+f.close()

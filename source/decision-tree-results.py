@@ -79,3 +79,13 @@ with open('../results/decistion_tree_results.csv', 'w') as f:  # Just use 'w' mo
 
 print("Training score: " + str(score_train))
 print("Testing score: " + str(score_test))
+
+#print out and save results
+
+stringOutput = ( "Tree depth: {}".format(dt_best_model.get_depth()) + "\nTree number of leaves: {}".format(dt_best_model.get_n_leaves()) + "\nTraining score: " + str(score_train) +"\nDecision tree mean error: {}".format(dt_mean_error) +"\nDecision tree mean sqaured error: {}".format(dt_mean_squared_error))
+
+
+f = open("../results/decisionTreeResults.txt", 'w')
+
+f.write(stringOutput)
+f.close()

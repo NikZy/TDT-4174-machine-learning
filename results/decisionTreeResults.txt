@@ -1,0 +1,5 @@
+Tree depth: 19
+Tree number of leaves: 607
+Training score: 0.8472397475704189
+Decision tree mean error: 79254.42040957275
+Decision tree mean sqaured error: 13190672041.406158

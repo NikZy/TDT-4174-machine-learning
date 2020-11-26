@@ -1,0 +1,4 @@
+Training score: 0.6616329010575273
+Testing score: 0.6748747802338102
+Linear regression  mean error: 99377.72959950761
+Linear regression mean sqaured error: 18178442326.462067

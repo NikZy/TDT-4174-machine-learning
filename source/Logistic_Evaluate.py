@@ -84,9 +84,13 @@ for i in range(testSetSize):
     MeanAbsoluteErrorFromAverage += compareAvrageAbs(i)/ testSetSize
     MeanSquaredErrorFromAverage += compareAvrageSquare(i)/ testSetSize
 
-#print out results
-print ("MAE using logistic regression:", MeanAbsoluteErrorLogistic)
-print ("MAE using guess average:      ", MeanAbsoluteErrorFromAverage)
+#print out and save results
 
-print ("MSE using logistic regression:", MeanSquaredErrorLogistic)
-print ("MSE using guess average:      ", MeanSquaredErrorFromAverage)
+stringOutput = ("MAE using logistic regression:" + str(MeanAbsoluteErrorLogistic) + "\nMAE using guess average:      " + str(MeanAbsoluteErrorFromAverage) + "\nMSE using logistic regression:" + str(MeanSquaredErrorLogistic) + "\nMSE using guess average:      " + str(MeanSquaredErrorFromAverage))
+
+print (stringOutput)
+
+f = open("../results/logisticResults.txt", 'w')
+
+f.write(stringOutput)
+f.close()

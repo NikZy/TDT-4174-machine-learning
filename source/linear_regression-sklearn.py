@@ -72,3 +72,14 @@ print("Testing score: " + str(score_test))
 
 print("Linear regression  mean error: {}".format(dt_mean_error))
 print("Linear regression mean sqaured error: {}".format(dt_mean_squared_error))
+
+
+#print out and save results
+
+stringOutput = ("Training score: " + str(score_train) + "\nTesting score: " + str(score_test) + "\nLinear regression  mean error: {}".format(dt_mean_error) + "\nLinear regression mean sqaured error: {}".format(dt_mean_squared_error))
+
+
+f = open("../results/linearResultsSKLearn.txt", 'w')
+
+f.write(stringOutput)
+f.close()
