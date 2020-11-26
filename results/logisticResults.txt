@@ -1,0 +1,4 @@
+MAE using logistic regression:94821.71714334025
+MAE using guess average:      180503.24683608094
+MSE using logistic regression:16636233345.902458
+MSE using guess average:      55912359681.44628
