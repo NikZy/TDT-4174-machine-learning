@@ -37,7 +37,7 @@ The self made linear regression model is trained by running "linear_regression_f
 `python linear_regression_from_scratch.py`
 
 ## Evaluating linear regression (self made):
-The self made linear regression model is trained by running "Linear_Evaluate.py" in the source folder, the regression strarts with coeficients retreived from the "Logistic.txt" in the models folder
+The self made linear regression model is trained by running "Linear_Evaluate.py" in the source folder, the regression strarts with coeficients retreived from the "Logistic.txt" in the models folder and results are saved to "linearResults.txt" in results
 `python Linear_Evaluate.py`
 
 ## Train logistic regression (self made):
@@ -45,7 +45,7 @@ The self made linear regression model is trained by running "logistic_regression
 `python logistic_regression_from_scratch.py`
 
 ## Evaluating logistic regression (self made):
-The self made logistic regression model is trained by running "Logistic_Evaluate.py" in the source folder, the regression strarts with coeficients retreived from the "Logistic.txt" in the models folder
+The self made logistic regression model is trained by running "Logistic_Evaluate.py" in the source folder, the regression strarts with coeficients retreived from the "Logistic.txt" in the models folder and results are saved to "logisticResults.txt" in results
 `python Logistic_Evaluate.py`
 
 
