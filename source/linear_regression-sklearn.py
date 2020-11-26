@@ -72,3 +72,5 @@ print("Testing score: " + str(score_test))
 
 print("Linear regression  mean error: {}".format(dt_mean_error))
 print("Linear regression mean sqaured error: {}".format(dt_mean_squared_error))
+
+print(regressor.coef_)
