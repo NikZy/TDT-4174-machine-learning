@@ -77,3 +77,5 @@ X_test.to_csv('../data/x_test')
 Y_training.to_csv('../data/y_training')
 Y_test.to_csv('../data/Y_test')
 print(Y)
+# TODO: Lagre dette i resultater
+print(df.describe().transpose())
