@@ -85,7 +85,7 @@ def grafdientDecentLog(thet, y, x, alpha, error, it):
 
 
 #initiate gradient decent with  0.00004 alpha and 0.3 epsilon
-epsilon = 0.3
+epsilon = 5
 alpha = 0.00004
 thetaLog = grafdientDecentLog(thetaLog, y_varLog, x_varLog, alpha, epsilon, 0)
 
