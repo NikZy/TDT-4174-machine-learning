@@ -5,6 +5,8 @@ import { isVariableDeclaration } from 'typescript';
 import { features as Features } from 'process';
 import { maxHeaderSize } from 'http';
 import { useForm } from 'react-hook-form';
+import { Slider } from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
 
 const ApiPost = (url, data) =>
   fetch(`http://localhost:5000/` + url, {
@@ -55,6 +57,16 @@ function App() {
           name="bedrooms"
           defaultValue="2"
           ref={register({ required: true })}
+        />
+        Grade
+        <Slider
+          name="grade"
+          ref={register({ required: true })}
+          inputRef={register({ required: true })}
+          defaultValue={5}
+          min={0}
+          max={10}
+          valueLabelDisplay="auto"
         />
         {errors.bedroom && <span>This field is required</span>}
         <input type="submit" />
