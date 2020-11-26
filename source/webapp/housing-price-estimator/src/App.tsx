@@ -4,7 +4,7 @@ import './App.css';
 import { isVariableDeclaration } from 'typescript';
 import { features as Features } from 'process';
 import { maxHeaderSize } from 'http';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Slider } from '@material-ui/core';
 import { FormControl } from '@material-ui/core';
 
@@ -20,7 +20,7 @@ const ApiPost = (url, data) =>
     body: JSON.stringify(data), // body data type must match "Content-Type" header
   }).then((res) => res.json());
 function App() {
-  const { register, handleSubmit, watch, errors } = useForm();
+  const { register, handleSubmit, watch, errors, control } = useForm();
   const predictedPriceTest = estimate_price(normalizeParameters(test));
   const onSubmit = (data) => {
     console.log(data);
@@ -59,10 +59,24 @@ function App() {
           ref={register({ required: true })}
         />
         Grade
+        <Controller
+          name="grade"
+          control={control}
+          defaultValue={7}
+          onChange={(value) => value}
+          as={
+            <Slider
+              defaultValue={5}
+              min={0}
+              max={10}
+              valueLabelDisplay="auto"
+              step={1}
+            />
+          }
+        />
         <Slider
           name="grade"
           ref={register({ required: true })}
-          inputRef={register({ required: true })}
           defaultValue={5}
           min={0}
           max={10}
