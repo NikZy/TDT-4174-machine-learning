@@ -23,6 +23,7 @@ function App() {
   const { register, handleSubmit, watch, errors, control } = useForm();
   const predictedPriceTest = estimate_price(normalizeParameters(test));
   const onSubmit = (data) => {
+    console.log('Data:');
     console.log(data);
     const dataConvertedToInts = convertIntObj(data);
     console.log(convertIntObj(data));
@@ -56,31 +57,25 @@ function App() {
           type="number"
           name="bedrooms"
           defaultValue="2"
-          ref={register({ required: true })}
+          // ref={register({ required: true })}
         />
         Grade
         <Controller
           name="grade"
-          control={control}
           defaultValue={7}
-          onChange={(value) => value}
-          as={
-            <Slider
-              defaultValue={5}
-              min={0}
-              max={10}
-              valueLabelDisplay="auto"
-              step={1}
-            />
-          }
+          as={<Slider min={0} max={10} valueLabelDisplay="on" step={1} />}
+          control={control}
         />
         <Slider
-          name="grade"
-          ref={register({ required: true })}
-          defaultValue={5}
           min={0}
+          valueLabelFormat="bedroom"
+          name="bathrooms"
+          defaultValue={7}
           max={10}
-          valueLabelDisplay="auto"
+          innerRef={register}
+          // ref={register}
+          valueLabelDisplay="on"
+          step={1}
         />
         {errors.bedroom && <span>This field is required</span>}
         <input type="submit" />
