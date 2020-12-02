@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { features as Features } from 'process';
 import { Controller, useForm } from 'react-hook-form';
 import { Button, Input, Slider } from '@material-ui/core';
 import styled from 'styled-components';
+import './assets/css/main.css';
+import videoClip from './images/banner.mp4';
+import './assets/sass/main.scss';
+import bannerImage from './images/banner.jpg';
+import bg1 from './images/bg.jpg';
 
 const ApiPost = (url, data) =>
   fetch(`http://localhost:5000/` + url, {
@@ -18,67 +23,307 @@ const ApiPost = (url, data) =>
   }).then((res) => res.json());
 function App() {
   const { register, handleSubmit, watch, errors, control } = useForm();
+  const [estimatedPrice, setEstimatedPrice] = useState<number>();
   const predictedPriceTest = estimate_price(normalizeParameters(test));
   const onSubmit = (data) => {
     console.log('Data:');
-    console.log(data);
     const dataConvertedToInts = convertIntObj(data);
     console.log(convertIntObj(data));
+    data.lastFixed = calculateLastFixed(data.year_built, data.year_renovated);
+    data.center_distance = calculateCenterDistance(
+      data.latitude,
+      data.longitude
+    );
     const features = Object.assign(test, dataConvertedToInts);
     console.log(features);
     ApiPost('estimator', features)
-      .then((res) => console.log(res))
+      .then((res) => setEstimatedPrice(res.prediction))
       .catch((err) => console.log(err));
   };
   return (
-    <FormContainer>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <InputContainer>
-          Bedrooms
-          <Input
-            type="number"
-            name="bedrooms"
-            defaultValue="2"
-            inputRef={register({ required: true })}
-          />
-          {errors.bedroom && <span>This field is required</span>}
-        </InputContainer>
-        <InputContainer>
-          Grade
-          <Input
-            type="number"
-            name="grade"
-            defaultValue="7"
-            inputRef={register({ required: true })}
-          />
-          {errors.number && <span>This field is required</span>}
-        </InputContainer>
+    <html>
+      <head>
+        <title>Industrious by TEMPLATED</title>
+        <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, user-scalable=no"
+        />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+      </head>
+      <body className="is-preload">
+        <header id="header">
+          <a className="logo" href="index.html">
+            Industrious
+          </a>
+          <nav></nav>
+        </header>
 
-        <InputContainer>
-          Bathrooms
-          <Input
-            type="number"
-            name="bathrooms"
-            defaultValue="7"
-            inputRef={register({ required: true })}
-          />
-          {errors.bathrooms && <span>This field is required</span>}
-        </InputContainer>
-        <InputContainer>
-          <Button name="submit" color="primary" type="submit">
-            Submit
-          </Button>
-        </InputContainer>
-      </form>
-      <h1>
-        {predictedPriceTest ? estimate_price(normalizeParameters(test)) : 0}
-      </h1>
-    </FormContainer>
+        <PosterHeader></PosterHeader>
+        <section className="wrapper">
+          <div className="inner">
+            <header className="special">
+              <h2>House Price estimator</h2>
+              <p>
+                In arcu accumsan arcu adipiscing accumsan orci ac. Felis id enim
+                aliquet. Accumsan ac integer lobortis commodo ornare aliquet
+                accumsan erat tempus amet porttitor.
+              </p>
+            </header>
+            <div className="highlights">
+              <FormContainer>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <InputContainer>
+                    Bedrooms
+                    <Input
+                      type="number"
+                      name="bedrooms"
+                      defaultValue="3"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.bedroom && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    Grade
+                    <Input
+                      type="number"
+                      name="grade"
+                      defaultValue="7"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.number && <span>This field is required</span>}
+                  </InputContainer>
+
+                  <InputContainer>
+                    Bathrooms
+                    <Input
+                      type="number"
+                      name="bathrooms"
+                      defaultValue="1"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.bathrooms && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    sqft_living
+                    <Input
+                      type="number"
+                      name="sqft_living"
+                      defaultValue="1180"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.sqft_living && <span>This field is required</span>}
+                  </InputContainer>
+
+                  <InputContainer>
+                    sqft_lot
+                    <Input
+                      type="number"
+                      name="sqft_lot"
+                      defaultValue="5650"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.sqft_lot && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    waterfront
+                    <Input
+                      type="number"
+                      name="waterfront"
+                      defaultValue="0"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.waterfront && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    floors
+                    <Input
+                      type="number"
+                      name="floors"
+                      defaultValue="1"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.floors && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    view
+                    <Input
+                      type="number"
+                      name="view"
+                      defaultValue="0"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.view && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    condition
+                    <Input
+                      type="number"
+                      name="condition"
+                      defaultValue="3"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.condition && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    sqft_above
+                    <Input
+                      type="number"
+                      name="sqft_above"
+                      defaultValue="1180"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.sqft_above && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    sqft_basement
+                    <Input
+                      type="number"
+                      name="sqft_basement"
+                      defaultValue="0"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.sqft_basement && (
+                      <span>This field is required</span>
+                    )}
+                  </InputContainer>
+                  <InputContainer>
+                    zip_code
+                    <Input
+                      type="number"
+                      name="zip_code"
+                      defaultValue="98178"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.zip_code && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    latitude
+                    <Input
+                      type="number"
+                      name="latitude"
+                      defaultValue="47.5112"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.latitude && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    longitude
+                    <Input
+                      type="number"
+                      name="longitude"
+                      defaultValue="-122.257"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.longitude && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    year_built
+                    <Input
+                      type="number"
+                      name="year_built"
+                      defaultValue="1995"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.year_built && <span>This field is required</span>}
+                  </InputContainer>
+                  <InputContainer>
+                    year_renovated
+                    <Input
+                      type="number"
+                      name="year_renovated"
+                      defaultValue="0"
+                      inputRef={register({ required: true })}
+                    />
+                    {errors.year_renovated && (
+                      <span>This field is required</span>
+                    )}
+                  </InputContainer>
+                  <InputContainer>
+                    <Button name="submit" color="primary" type="submit">
+                      Submit
+                    </Button>
+                  </InputContainer>
+                </form>
+                <h1>{predictedPriceTest ? estimatedPrice : 0}</h1>
+              </FormContainer>
+            </div>
+          </div>
+        </section>
+
+        <section id="cta" className="wrapper">
+          <div className="inner">
+            {/*             <h2>Curabitur ullamcorper ultricies</h2>
+            <p>
+              Nunc lacinia ante nunc ac lobortis. Interdum adipiscing gravida
+              odio porttitor sem non mi integer non faucibus ornare mi ut ante
+              amet placerat aliquet. Volutpat eu sed ante lacinia sapien lorem
+              accumsan varius montes viverra nibh in adipiscing. Lorem ipsum
+              dolor vestibulum ante ipsum primis in faucibus vestibulum. Blandit
+              adipiscing eu felis iaculis volutpat ac adipiscing sed feugiat eu
+              faucibus. Integer ac sed amet praesent. Nunc lacinia ante nunc ac
+              gravida.
+            </p> */}
+          </div>
+        </section>
+
+        <footer id="footer">
+          <div className="inner">
+            <div className="content">
+              <section>
+                <h3>About this project</h3>
+                <p>
+                  Nunc lacinia ante nunc ac lobortis. Interdum adipiscing
+                  gravida odio porttitor sem non mi integer non faucibus ornare
+                  mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia
+                  sapien lorem accumsan varius montes viverra nibh in
+                  adipiscing. Lorem ipsum dolor vestibulum ante ipsum primis in
+                  faucibus vestibulum. Blandit adipiscing eu felis iaculis
+                  volutpat ac adipiscing sed feugiat eu faucibus. Integer ac sed
+                  amet praesent. Nunc lacinia ante nunc ac gravida.
+                </p>
+              </section>
+              <section>
+                <h4>Group members</h4>
+                <ul className="alt">
+                  <li>Sindre J.I Sivertsen (sjsivert)</li>
+                  <li>Eivind Floer</li>
+                  <li>Brage</li>
+                </ul>
+              </section>
+            </div>
+            <div className="copyright">
+              &copy; Untitled. Photos <a href="https://unsplash.co">Unsplash</a>
+              , Video <a href="https://coverr.co">Coverr</a>.
+            </div>
+          </div>
+        </footer>
+
+        <script src="assets/js/jquery.min.js"></script>
+        <script src="assets/js/browser.min.js"></script>
+        <script src="assets/js/breakpoints.min.js"></script>
+        <script src="assets/js/util.js"></script>
+        <script src="assets/js/main.js"></script>
+      </body>
+    </html>
   );
 }
+
+const PosterHeader = styled.div`
+  width: 100%;
+  height: 400px;
+  background-color: #111111;
+  background-image: linear-gradient(
+      rgba(0, 0, 0, 0.75),
+      rgba(206, 27, 40, 0.25)
+    ),
+    url(${bg1});
+`;
 const FormContainer = styled.div`
   display: flex;
-  max-width: 20rem;
+  margin: 0 auto;
+  max-width: 100rem;
   flex-direction: column;
 `;
 
