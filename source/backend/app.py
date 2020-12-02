@@ -11,7 +11,8 @@ CORS(app)
 
 scaler = load('../../models/datascaler.joblib')
 
-dt_best_model = load('../../models/decision-tree-optimized.joblib')
+# dt_best_model = load('../../models/decision-tree-optimized.joblib')
+dt_best_model = load('../../models/linear-regression-sklearn.joblib')
 X_test = pd.read_csv('../../data/x_test').iloc[:, 1:]
 # print(X_test.iloc[4, :])
 

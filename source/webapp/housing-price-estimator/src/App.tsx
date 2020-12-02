@@ -6,7 +6,7 @@ import { Button, Input, Slider } from '@material-ui/core';
 import styled from 'styled-components';
 import './assets/css/main.css';
 import videoClip from './images/banner.mp4';
-import './assets/sass/main.scss';
+// import './assets/sass/main.scss';
 import bannerImage from './images/banner.jpg';
 import bg1 from './images/bg.jpg';
 
@@ -64,11 +64,10 @@ function App() {
         <section className="wrapper">
           <div className="inner">
             <header className="special">
-              <h2>House Price estimator</h2>
+              <h2>House Price estimator for King County</h2>
               <p>
-                In arcu accumsan arcu adipiscing accumsan orci ac. Felis id enim
-                aliquet. Accumsan ac integer lobortis commodo ornare aliquet
-                accumsan erat tempus amet porttitor.
+                Type in features about the house, and we will give you and
+                estimated price.
               </p>
             </header>
             <div className="highlights">
@@ -246,6 +245,7 @@ function App() {
                     </Button>
                   </InputContainer>
                 </form>
+                <h2>Estimated price:</h2>
                 <h1>{predictedPriceTest ? estimatedPrice : 0}</h1>
               </FormContainer>
             </div>
@@ -274,22 +274,20 @@ function App() {
               <section>
                 <h3>About this project</h3>
                 <p>
-                  Nunc lacinia ante nunc ac lobortis. Interdum adipiscing
-                  gravida odio porttitor sem non mi integer non faucibus ornare
-                  mi ut ante amet placerat aliquet. Volutpat eu sed ante lacinia
-                  sapien lorem accumsan varius montes viverra nibh in
-                  adipiscing. Lorem ipsum dolor vestibulum ante ipsum primis in
-                  faucibus vestibulum. Blandit adipiscing eu felis iaculis
-                  volutpat ac adipiscing sed feugiat eu faucibus. Integer ac sed
-                  amet praesent. Nunc lacinia ante nunc ac gravida.
+                  The site uses a Linear Regression model. The modell is trained
+                  on this dataset from
+                  <a href="https://www.kaggle.com/harlfoxem/housesalesprediction">
+                    https://www.kaggle.com/harlfoxem/housesalesprediction
+                  </a>
+                  .
                 </p>
               </section>
               <section>
                 <h4>Group members</h4>
                 <ul className="alt">
                   <li>Sindre J.I Sivertsen (sjsivert)</li>
-                  <li>Eivind Floer</li>
-                  <li>Brage</li>
+                  <li>Eivind Emil Floer (eivinf)</li>
+                  <li>Brage Lytskjold (bragelyt)</li>
                 </ul>
               </section>
             </div>
