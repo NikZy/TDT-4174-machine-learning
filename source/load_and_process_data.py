@@ -23,8 +23,7 @@ df['center_distance'] = latSqrdList
 # Combine built and renovated features
 lastFixedList = [0]*len(df['yr_renovated'])
 for i in range(len(df['yr_built'])):
-    lastFixedList[i] = (2020 - max(df.at[i, 'yr_built'],
-                                   df.at[i, 'yr_renovated'])) / df.at[i, 'sqft_living']
+    lastFixedList[i] = (max(df.at[i, 'yr_built'], df.at[i, 'yr_renovated']))
 
 df['last_fixed'] = lastFixedList
 
@@ -78,3 +77,5 @@ X_test.to_csv('../data/x_test')
 Y_training.to_csv('../data/y_training')
 Y_test.to_csv('../data/Y_test')
 print(Y)
+# TODO: Lagre dette i resultater
+print(df.describe().transpose())

@@ -1,0 +1,4 @@
+MAE using linear regression:99377.7295995079
+MAE using guess average:      180503.24683608094
+MSE using linear regression:18178442326.462067
+MSE using guess average:      55912359681.44628
