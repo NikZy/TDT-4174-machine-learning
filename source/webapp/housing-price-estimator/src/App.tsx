@@ -1,12 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { isVariableDeclaration } from 'typescript';
 import { features as Features } from 'process';
-import { maxHeaderSize } from 'http';
 import { Controller, useForm } from 'react-hook-form';
-import { Slider } from '@material-ui/core';
-import { FormControl } from '@material-ui/core';
+import { Button, Input, Slider } from '@material-ui/core';
+import styled from 'styled-components';
 
 const ApiPost = (url, data) =>
   fetch(`http://localhost:5000/` + url, {
@@ -33,59 +30,63 @@ function App() {
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
-  console.log(test);
-  // console.log(normalizeParameters(test));
-  // console.log(estimate_price(normalizeParameters(test)));
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <FormContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          type="number"
-          name="bedrooms"
-          defaultValue="2"
-          // ref={register({ required: true })}
-        />
-        Grade
-        <Controller
-          name="grade"
-          defaultValue={7}
-          as={<Slider min={0} max={10} valueLabelDisplay="on" step={1} />}
-          control={control}
-        />
-        <Slider
-          min={0}
-          valueLabelFormat="bedroom"
-          name="bathrooms"
-          defaultValue={7}
-          max={10}
-          innerRef={register}
-          // ref={register}
-          valueLabelDisplay="on"
-          step={1}
-        />
-        {errors.bedroom && <span>This field is required</span>}
-        <input type="submit" />
+        <InputContainer>
+          Bedrooms
+          <Input
+            type="number"
+            name="bedrooms"
+            defaultValue="2"
+            inputRef={register({ required: true })}
+          />
+          {errors.bedroom && <span>This field is required</span>}
+        </InputContainer>
+        <InputContainer>
+          Grade
+          <Input
+            type="number"
+            name="grade"
+            defaultValue="7"
+            inputRef={register({ required: true })}
+          />
+          {errors.number && <span>This field is required</span>}
+        </InputContainer>
+
+        <InputContainer>
+          Bathrooms
+          <Input
+            type="number"
+            name="bathrooms"
+            defaultValue="7"
+            inputRef={register({ required: true })}
+          />
+          {errors.bathrooms && <span>This field is required</span>}
+        </InputContainer>
+        <InputContainer>
+          <Button name="submit" color="primary" type="submit">
+            Submit
+          </Button>
+        </InputContainer>
       </form>
       <h1>
         {predictedPriceTest ? estimate_price(normalizeParameters(test)) : 0}
       </h1>
-    </div>
+    </FormContainer>
   );
 }
+const FormContainer = styled.div`
+  display: flex;
+  max-width: 20rem;
+  flex-direction: column;
+`;
+
+const InputContainer = styled.div`
+  display: flex;
+  align-self: flex-end;
+  justify-content: space-between;
+`;
 const calculateCenterDistance = (lat: number, long: number): number => {
   const latCenter = 47.63;
   const longCenter = -122.2;
