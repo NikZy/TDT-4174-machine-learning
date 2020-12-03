@@ -8,11 +8,11 @@ app = Flask(__name__)
 api = Api(app)
 cors = CORS(app, resources={r"*": {"origins": "https://house-pricing.nikzy.no"}})
 
-scaler = load('../../models/datascaler.joblib')
+scaler = load('../../../models/datascaler.joblib')
 
 # dt_best_model = load('../../models/decision-tree-optimized.joblib')
-dt_best_model = load('../../models/linear-regression-sklearn.joblib')
-X_test = pd.read_csv('../../data/x_test').iloc[:, 1:]
+dt_best_model = load('../../../models/linear-regression-sklearn.joblib')
+X_test = pd.read_csv('../../../data/x_test').iloc[:, 1:]
 # print(X_test.iloc[4, :])
 
 # print(dt_best_model.predict([X_test.iloc[4, :]]))
