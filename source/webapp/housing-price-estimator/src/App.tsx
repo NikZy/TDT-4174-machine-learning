@@ -247,7 +247,7 @@ function App() {
                   </InputContainer>
                 </form>
                 <h2>Estimated price:</h2>
-                <h1>{predictedPriceTest ? estimatedPrice : 0}$</h1>
+                <h1>{estimatedPrice? (estimatedPrice +'$') : 0}</h1>
               </FormContainer>
             </div>
           </div>
