@@ -72,6 +72,9 @@ class HousePriceEstimatorEndpint(Resource):
     def get(self):
         return {'test': 'world'}
 
+@app.route("/")
+def hello():
+    return "Hello World from Flask"
 
 api.add_resource(HousePriceEstimatorEndpint, '/estimator')
 

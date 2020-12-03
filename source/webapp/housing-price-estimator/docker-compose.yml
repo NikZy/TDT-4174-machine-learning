@@ -1,0 +1,24 @@
+version: "3.3"
+networks:
+  traefik:
+    external: true
+services:
+  house-pricing-webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: house-pricing-webapp
+    container_name: house-pricing-webapp
+    restart: always
+    networks:
+      - traefik
+
+    labels:
+      #### Labels define the behavior and rules of the traefik proxy for this container ####
+      - "traefik.enable=true" # <== Enable traefik to proxy this container
+      - "traefik.http.routers.house-pricing.entrypoints=websecure" # <== Defining the entrypoint for http, **ref: line 30
+      - "traefik.http.routers.house-pricing.rule=Host(`house-pricing.nikzy.no`)" # <== Your Domain Name goes here for the http rule
+        #      - "traefik.http.routers.house-pricing.middlewares=auth-middleware" # Add auth middleware
+      - "traefik.http.routers.house-pricing.tls.certresolver=lets-encr" # Adds SSL to App
+        #      - "traefik.http.middlewares.auth-middleware.basicauth.usersfile=/users_credentials" # App now requires authentication
+

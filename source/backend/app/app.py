@@ -6,8 +6,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
-CORS(app)
-
+cors = CORS(app, resources={r"*": {"origins": "https://house-pricing.nikzy.no"}})
 
 scaler = load('../../models/datascaler.joblib')
 
@@ -72,9 +71,12 @@ class HousePriceEstimatorEndpint(Resource):
     def get(self):
         return {'test': 'world'}
 
+@app.route("/")
+def hello():
+    return "Hello World from Flask"
 
 api.add_resource(HousePriceEstimatorEndpint, '/estimator')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=False, port=80)
