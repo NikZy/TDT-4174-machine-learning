@@ -40,10 +40,11 @@ function App() {
       .then((res) => setEstimatedPrice(res.prediction))
       .catch((err) => console.log(err));
   };
+  document.title = "House Pricing";
   return (
     <html>
       <head>
-        <title>Industrious by TEMPLATED</title>
+        <title>TDT4173 Machine Learning</title>
         <meta charSet="utf-8" />
         <meta
           name="viewport"
@@ -55,7 +56,7 @@ function App() {
       <body className="is-preload">
         <header id="header">
           <a className="logo" href="index.html">
-            Industrious
+            TDT4173 Machine Learning
           </a>
           <nav></nav>
         </header>
@@ -246,7 +247,7 @@ function App() {
                   </InputContainer>
                 </form>
                 <h2>Estimated price:</h2>
-                <h1>{predictedPriceTest ? estimatedPrice : 0}</h1>
+                <h1>{predictedPriceTest ? estimatedPrice : 0}$</h1>
               </FormContainer>
             </div>
           </div>

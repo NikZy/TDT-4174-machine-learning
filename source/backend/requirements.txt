@@ -1,0 +1,10 @@
+sklearn
+numpy
+pandas
+seaborn
+matplotlib
+scipy
+flask
+flask-restful
+flask-cors
+waitress
